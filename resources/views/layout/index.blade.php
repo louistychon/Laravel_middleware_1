@@ -14,6 +14,8 @@
         @yield('content')
     </main>
     @include('partial.footer')
+
+    <script src="../path/to/flowbite/dist/flowbite.js"></script>
 </body>
 
 </html>

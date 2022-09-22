@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\RoleVerification;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +16,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.home');
 });
 
+Route::get('/articles', function () {
+    return view('pages.frontoffice.articles');
+})->middleware('role');
 
-Route::get('/', [LoginController::class, 'home']);
-Route::get('/articles', [LoginController::class, 'article']);
 
-
-
+Route::get('/foo', function () {
+    return view('pages.frontoffice.foo');
+})->middleware('role');
 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
