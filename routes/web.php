@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,13 +20,15 @@ Route::get('/foo', function () {
     return view('pages.frontoffice.foo');
 })->middleware('role');
 
-
-
 //back
 
 Route::get('/back/home', function () {
     return view('pages.backoffice.home');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/back/users',[RoleController::class, 'index'])->middleware('role:admin');
+Route::get('/users/{id}/show', [ArticleController::class, 'show'])->middleware(['auth']);
+Route::delete('/users/{id}/delete', [ArticleController::class, 'show'])->middleware(['auth']);
 
 
 
