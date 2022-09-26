@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('pages.backoffice.users', compact('users'));
+        return view('pages.backoffice.users.users', compact('users'));
     }
 
     /**
@@ -27,7 +27,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $allroles = Role::all();
+        return redirect('pages.backoffice.users.create', compact('allroles'));
     }
 
     /**
@@ -36,9 +37,14 @@ class RoleController extends Controller
      * @param  \App\Http\Requests\StoreRoleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        //
+        $store = new User();
+        $store->titre = $request->titre;
+        $store->texte = $request->texte;
+        $store->user_id = $request->user_id;
+        $store->save();
+        return redirect()->back();
     }
 
     /**
@@ -47,9 +53,9 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show()
     {
-        //
+        return redirect('pages.backoffice.users.show');
     }
 
     /**
@@ -81,8 +87,20 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        //
+        $todelete = User::find($id);
+        if ($todelete->roles_id != 1) {
+            $this->authorize('isAdmin', $todelete);
+            $todelete->delete();
+        }
+        else if($todelete->roles_id == 2 || $todelete->roles_id == 3){
+            $this->authorize('isWebmaster', $todelete);
+            $todelete->delete();
+        }
+        else{
+            print("error");
+        }
+        return redirect()->back();
     }
 }

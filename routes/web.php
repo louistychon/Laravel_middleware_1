@@ -22,15 +22,21 @@ Route::get('/foo', function () {
 
 //back
 
+//home
+
 Route::get('/back/home', function () {
     return view('pages.backoffice.home');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/back/users',[RoleController::class, 'index'])->middleware('role:admin');
-Route::get('/users/{id}/show', [ArticleController::class, 'show'])->middleware(['auth']);
-Route::delete('/users/{id}/delete', [ArticleController::class, 'show'])->middleware(['auth']);
+//users
 
+Route::get('/users',[RoleController::class, 'index'])->middleware('role:admin');
+Route::get('/users/{id}/show', [RoleController::class, 'show'])->middleware(['auth']);
+Route::get('/users/create', [RoleController::class, 'create'])->middleware(['auth']);
+Route::post('/users/create/new', [RoleController::class, 'store'])->middleware(['auth']);
+Route::delete('/users/{id}/delete', [RoleController::class, 'destroy'])->middleware(['auth']);
 
+//articles
 
 Route::get('/articles', [ArticleController::class, 'index'])->middleware(['auth']);
 Route::get('/articles/create', [ArticleController::class, 'create'])->middleware(['auth']);
